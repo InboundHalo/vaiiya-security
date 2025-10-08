@@ -61,7 +61,7 @@ async fn main() {
 
 async fn handle_event(event: &Event, client: Arc<Client>, cache: Arc<InMemoryCache>) {
     info!("{event:#?}");
-    
+
     match event {
         Event::Ready(_) => {
             info!("ready");
@@ -151,7 +151,7 @@ async fn setup_verification(client: Arc<Client>, guild_id: Id<GuildMarker>) -> R
     // TODO: SAVE ROLE ID TO DB
     let role = client.create_role(guild_id)
         .name("verified")
-        .color(6291322) // Just a green color I got from the color picker #00c822 TODO: change this maybe? 
+        .color(6291322) // Just a green color I got from the color picker #00c822 TODO: change this maybe?
         .mentionable(false)
         .permissions(Permissions::empty())
         .await.map_err(|_| SetupErrors::CouldNotCreateRole)?
