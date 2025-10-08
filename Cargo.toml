@@ -4,11 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-twilight-cache-inmemory = "0.16.0"
-twilight-gateway = "0.16.0"
-twilight-http = "0.16.0"
-twilight-model = "0.16.0"
-twilight-util = { version = "0.16.0", features = ["builder"] }
+twilight-cache-inmemory = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-gateway = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-http = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-model = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-util = { git = "https://github.com/twilight-rs/twilight.git", branch = "next", features = ["builder"] }
+twilight-standby = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
 
 tracing = "0.1.41"
 tracing-subscriber = "0.3.19"
