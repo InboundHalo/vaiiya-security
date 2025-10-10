@@ -7,8 +7,8 @@ edition = "2024"
 rustls = "0.23.32" # For some stupid reason this code won't compile unless I have this UNUSED crate so that it does a build script with some stupid CryptoProvider
 
 twilight-cache-inmemory = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
-twilight-gateway = { git = "https://github.com/twilight-rs/twilight.git", branch = "next", features = ["rustls"] }
-twilight-http = { git = "https://github.com/twilight-rs/twilight.git", branch = "next", features = ["native-tls"] }
+twilight-gateway = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-http = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
 twilight-model = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
 twilight-util = { git = "https://github.com/twilight-rs/twilight.git", branch = "next", features = ["builder"] }
 twilight-standby = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
