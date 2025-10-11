@@ -1,5 +1,4 @@
 use std::sync::Arc;
-use tracing::debug;
 use tracing::error;
 use tracing::info;
 use twilight_cache_inmemory::InMemoryCache;
@@ -10,14 +9,13 @@ use twilight_model::channel::message::component::{ActionRow, TextInput, TextInpu
 use twilight_model::channel::message::{Component, MessageFlags};
 use twilight_model::channel::permission_overwrite::{PermissionOverwrite, PermissionOverwriteType};
 use twilight_model::gateway::event::Event;
-use twilight_model::guild;
+use twilight_model::gateway::payload::incoming::GuildCreate;
 use twilight_model::guild::Permissions;
 use twilight_model::http::interaction::{
     InteractionResponse, InteractionResponseData, InteractionResponseType,
 };
 use twilight_model::id::Id;
-use twilight_model::id::marker::UserMarker;
-use twilight_model::id::marker::{ChannelMarker, GuildMarker, MessageMarker, RoleMarker};
+use twilight_model::id::marker::GuildMarker;
 use twilight_util::builder::message::{ActionRowBuilder, ButtonBuilder};
 
 use crate::Context;
@@ -29,6 +27,23 @@ pub async fn handle_event(event: &Event, context: Arc<Context>) {
     match event {
         Event::Ready(_) => {
             info!("ready");
+        }
+        Event::GuildCreate(guild_create) => {
+            info!("Guild create {:?}", guild_create);
+            // Will send a message when someone just invites the bot to their sever
+
+            // If we already know this guild that means the bot just started up so we can go ahead
+            // and update the members
+            if let Some(guild_settings) = context.database.get_guild_settings(guild_create.id()) {
+                // TODO: Update members
+                return;
+            }
+
+            if let GuildCreate::Available(guild) = &**guild_create {
+                if let Some(time_joined) = guild.joined_at {
+                    time_joined.as_secs()
+                }
+            }
         }
         Event::InteractionCreate(interaction) => {
             let Some(data) = &interaction.data else {

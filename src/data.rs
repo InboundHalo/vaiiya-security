@@ -1,7 +1,7 @@
 use rusqlite::{Connection, Result as SqliteResult, params};
-use std::error::Error;
 use std::path::Path;
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
+use std::{error::Error, rc::Rc};
 
 use twilight_model::id::{
     Id,
@@ -22,8 +22,8 @@ pub struct User {
 
 #[derive(Debug, Clone)]
 pub struct EmbarkID {
-    username: String, // min 2 char max 16 char
-    numbers: u16,     // up to 9999 min 0001
+    username: Rc<str>, // min 2 char max 16 char
+    numbers: u16,      // up to 9999 min 0001
 }
 
 #[derive(Debug)]
@@ -62,7 +62,7 @@ impl EmbarkID {
         }
 
         Ok(EmbarkID {
-            username: username.to_string(),
+            username: username.into(),
             numbers,
         })
     }
