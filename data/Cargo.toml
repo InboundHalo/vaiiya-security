@@ -1,0 +1,15 @@
+[package]
+name = "data"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+twilight-model = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+
+tracing = "0.1.41"
+
+rusqlite = { version = "0.37.0", features = ["bundled"] }
+
+[profile.dev.package."*"]
+opt-level = 3

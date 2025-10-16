@@ -1,0 +1,18 @@
+[package]
+name = "common"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { default-features = false, features = ["signal", "rt-multi-thread", "rt"], version = "1.43.0" }
+async-trait = "0.1"
+derive-getters = "0.5.0"
+
+twilight-cache-inmemory = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-gateway = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-http = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-model = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+twilight-util = { git = "https://github.com/twilight-rs/twilight.git", branch = "next", features = ["builder", "permission-calculator"] }
+twilight-standby = { git = "https://github.com/twilight-rs/twilight.git", branch = "next" }
+
+tracing = "0.1.41"

@@ -22,8 +22,8 @@ pub struct User {
 
 #[derive(Debug, Clone)]
 pub struct EmbarkID {
-    username: Rc<str>, // min 2 char max 16 char
-    numbers: u16,      // up to 9999 min 0001
+    username: Box<str>, // min 2 char max 16 char
+    numbers: u16,       // up to 9999 min 0001
 }
 
 #[derive(Debug)]
@@ -103,7 +103,7 @@ impl Database {
         })
     }
 
-    pub fn get_guild_settings(&self, guild_id: Id<GuildMarker>) -> Option<GuildSettings> {
+    pub fn get_guild_settings(&self, guild_id: &Id<GuildMarker>) -> Option<GuildSettings> {
         let conn = self.conn.lock().unwrap();
 
         let mut stmt = conn
@@ -144,46 +144,45 @@ impl Database {
         Ok(())
     }
 
-    pub fn get_user_by_discord_id(
-        &self,
-        discord_user: Id<UserMarker>,
-    ) -> SqliteResult<Option<User>> {
+    pub fn get_user_by_discord_id(&self, discord_user: Id<UserMarker>) -> Option<User> {
         let conn = self.conn.lock().unwrap();
 
-        let mut stmt =
-            conn.prepare("SELECT discord_user, embark_id FROM users WHERE discord_user = ?")?;
+        let mut stmt = conn
+            .prepare("SELECT discord_user, embark_id FROM users WHERE discord_user = ?")
+            .ok()?;
 
-        let mut rows = stmt.query(params![discord_user.get() as i64])?;
+        let mut rows = stmt.query(params![discord_user.get() as i64]).ok()?;
 
-        match rows.next()? {
+        match rows.next().ok()? {
             Some(row) => {
-                let embark_id_str: String = row.get(1)?;
-                Ok(Some(User {
-                    discord_user: Id::new(row.get(0)?),
+                let embark_id_str: String = row.get(1).ok()?;
+                Some(User {
+                    discord_user: Id::new(row.get(0).ok()?),
                     embark_id: EmbarkID::new(&embark_id_str).expect("Database should be correct"),
-                }))
+                })
             }
-            None => Ok(None),
+            None => None,
         }
     }
 
-    pub fn get_user_by_embark_id(&self, embark_id: &EmbarkID) -> SqliteResult<Option<User>> {
+    pub fn get_user_by_embark_id(&self, embark_id: &EmbarkID) -> Option<User> {
         let conn = self.conn.lock().unwrap();
 
-        let mut stmt =
-            conn.prepare("SELECT discord_user, embark_id FROM users WHERE embark_id = ?")?;
+        let mut stmt = conn
+            .prepare("SELECT discord_user, embark_id FROM users WHERE embark_id = ?")
+            .ok()?;
 
-        let mut rows = stmt.query(params![embark_id.to_string()])?;
+        let mut rows = stmt.query(params![embark_id.to_string()]).ok()?;
 
-        match rows.next()? {
+        match rows.next().ok()? {
             Some(row) => {
-                let embark_id_str: String = row.get(1)?;
-                Ok(Some(User {
-                    discord_user: Id::new(row.get(0)?),
+                let embark_id_str: String = row.get(1).ok()?;
+                Some(User {
+                    discord_user: Id::new(row.get(0).ok()?),
                     embark_id: EmbarkID::new(&embark_id_str).expect("Database should be correct"),
-                }))
+                })
             }
-            None => Ok(None),
+            None => None,
         }
     }
 
